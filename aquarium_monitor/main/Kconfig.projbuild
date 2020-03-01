@@ -1,0 +1,114 @@
+menu "Aquarium Monitor Configuration"
+
+config WIFI_SSID
+    string "WiFi SSID"
+    default ""
+    help
+        SSID (network name) for the example to connect to.
+
+config WIFI_PASSWORD
+    string "WiFi Password"
+    default ""
+    help
+        WiFi password (WPA or WPA2) for the example to use.
+        Can be left blank if the network has no security set.
+
+config MQTT_BROKER
+    string "MQTT broker"
+    default "soldier.cloudmqtt.com"
+    help
+        MQTT broker which you want to login, either IP address or domain name is OK.
+
+config MQTT_PORT
+    int "Default MQTT port"
+    default
+    help
+        MQTT port.
+
+config MQTT_USERNAME
+    string "MQTT username"
+    default ""
+    help
+        Username to connect to mqtt broker.
+
+config MQTT_PASSWORD
+    string "MQTT Password"
+    default ""
+    help
+        Password to connect to mqtt broker..
+
+config MQTT_SUB_TOPIC
+    string "MQTT subscribe topic"
+    default ""
+    help
+        MQTT subscribe topic to MQTT broker.
+
+choice MQTT_SUB_QOS
+    prompt "MQTT Subscribe QoS"
+    default SUB_QOS1
+    help
+        MQTT subcribe QoS level.
+
+config SUB_QOS0
+    bool "QOS0"
+config SUB_QOS1
+    bool "QOS1"
+config SUB_QOS2
+    bool "QOS2"
+endchoice
+
+config DEFAULT_MQTT_SUB_QOS
+    int
+    default 0 if SUB_QOS0
+    default 1 if SUB_QOS1
+    default 2 if SUB_QOS2
+
+config MQTT_PUB_TOPIC_TEMP
+    string "MQTT publish temperature topic"
+    default ""
+    help
+        MQTT publish topic of the temperature sensor.
+
+config MQTT_PUB_TOPIC_LUMIN
+    string "MQTT publish light topic"
+    default ""
+    help
+        MQTT publish topic of the light sensor.
+
+choice MQTT_PUB_QOS
+    prompt "MQTT publish QoS"
+    default PUB_QOS1
+    help
+        MQTT publish QoS level.
+
+config PUB_QOS0
+    bool "QOS0"
+config PUB_QOS1
+    bool "QOS1"
+config PUB_QOS2
+    bool "QOS2"
+endchoice
+
+config DEFAULT_MQTT_PUB_QOS
+    int
+    default 0 if PUB_QOS0
+    default 1 if PUB_QOS1
+    default 2 if PUB_QOS2
+
+config MQTT_PUBLISH_INTERVAL
+    int "MQTT publish interval(ms)"
+    default 0
+    help
+        Default MQTT publish message interval.
+
+config BROKER_CERTIFICATE_OVERRIDE
+    string "Broker certificate override"
+    default ""
+    help
+        Please leave empty if broker certificate included from a textfile; otherwise fill in a base64 part of PEM format certificate
+
+config BROKER_CERTIFICATE_OVERRIDDEN
+    bool
+    default y if BROKER_CERTIFICATE_OVERRIDE != ""
+
+endmenu
