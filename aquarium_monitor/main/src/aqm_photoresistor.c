@@ -11,7 +11,18 @@ static const char *TAG = "AQM_PHOTORESISTOR";
 static const int DEVISION_CLOCK   = 8; // ADC sample collection clock = 80MHz/clk_div = 10MHz
 static const size_t LUX_VALUE_LEN = 3;
 
+static const float VIN  = 3.3; // V power voltage
+static const int RESISTANCE = 10000; //ohm resistance value
+
 float lux_value;
+
+static inline float aqm_avalue_to_lumen(int raw) {
+
+    float Vout = (float)raw * (VIN / (float)1023);// Conversion analog to voltage
+    float RLDR = (RESISTANCE * (VIN - Vout)) / Vout; // Conversion voltage to resistance
+    int phys = 500 / (RLDR / 1000); // Conversion resitance to lumen
+    return phys;
+}
 
 static void aqm_photoresistor_default_task(void *pvParameter)
 {
@@ -21,7 +32,9 @@ static void aqm_photoresistor_default_task(void *pvParameter)
 
     while (1) {
         if (ESP_OK == adc_read(&adc_data[0])) {
-            lux_value = (float)adc_data[0];
+            //lux_value = (float)adc_data[0];
+            vTaskDelay(1 / portTICK_PERIOD_MS);
+            lux_value = aqm_avalue_to_lumen(adc_data[0]);
             ESP_LOGI(TAG, "The light sensor detects value: %d\r\n", adc_data[0]);
         }
 
