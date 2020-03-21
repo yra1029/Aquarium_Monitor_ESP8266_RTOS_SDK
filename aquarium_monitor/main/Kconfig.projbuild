@@ -21,7 +21,7 @@ config MQTT_BROKER
 
 config MQTT_PORT
     int "Default MQTT port"
-    default
+    default 0
     help
         MQTT port.
 
